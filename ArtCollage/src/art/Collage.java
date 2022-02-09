@@ -51,7 +51,7 @@ public class Collage {
         //initialize collage
         collagePicture = new Picture( collageDimension*tileDimension, collageDimension*tileDimension);
         //scale to original
-        scale(collagePicture, originalPicture);
+        scale(originalPicture, collagePicture);
     }
 
     /*
@@ -74,9 +74,8 @@ public class Collage {
         // 3
         collagePicture = new Picture( collageDimension*tileDimension, collageDimension*tileDimension);
         // 4
-        scale(collagePicture, originalPicture);
+        scale(originalPicture, collagePicture);
     }
-
 
     /*
      * Scales the Picture @source into Picture @target size.
@@ -87,18 +86,18 @@ public class Collage {
      * @param target is the 
      */
     public static void scale (Picture source, Picture target) {
-        double wratio = target.width()/source.width();
-        double lratio = target.height()/source.height();
-        Picture finish = new Picture(target.width(), target.height());
-        for (int i=0;i>finish.width();i++) {
-            for (int j=0;j>finish.height();j++){
-                for(int n=0;n>n*wratio;n++){
-                    for(int m=0;m>m*lratio;m++){
-                    finish.set(i+n, j+m, source.get(i, j));
-                    }
-                }
+        int width  = target.width();
+        int height = target.height();
+
+        for (int targetCol = 0; targetCol < width-1; targetCol++) {
+            for (int targetRow = 0; targetRow < height-1; targetRow++) {
+                int sourceCol = targetCol * source.width()  / width;
+                int sourceRow = targetRow * source.height() / height;
+                Color color = source.get(sourceCol, sourceRow);
+                target.set(targetCol, targetRow, color);
             }
         }
+
     }
 
      /*
@@ -161,12 +160,18 @@ public class Collage {
      * where each tile has tileDimension X tileDimension pixels.
      */    
     public void makeCollage () {
-        //for each tile(each row for each column), for each pixel, each new pixel = old pixle translated over i tile lengths or j tile hieghts 
-        for (int i=0;i==getCollageDimension()-1;i++){
-            for (int j=0;j==getCollageDimension()-1;j++){
-                for (int n=)
+        //make a tile
+        Picture tile = new Picture(getTileDimension(),getTileDimension());
+        scale(getOriginalPicture(),tile);
+        //update collage picture
+        Picture p = getCollagePicture();
+        
+        Color currentColor;
+        for (int col = 0; col < p.height(); col++)
+            for (int row = 0; row < p.width(); row++){
+                currentColor = tile.get(col%tile.width(), row%tile.height());
+                collagePicture.set(col, row, currentColor);
             }
-        }
     }
 
     /*
