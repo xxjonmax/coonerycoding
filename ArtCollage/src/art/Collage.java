@@ -184,8 +184,23 @@ public class Collage {
      * @param collageRow tile row
      */
     public void colorizeTile (String component,  int collageCol, int collageRow) {
-
-        // WRITE YOUR CODE HERE
+        Color currentColor;
+        int Xoffset = collageCol*tileDimension;
+        int Yoffset = collageRow*tileDimension;
+        for (int x = 0; x<tileDimension; x++)
+            for(int y = 0; y<tileDimension; y++){
+                currentColor=collagePicture.get(x+Xoffset,y+Yoffset);
+                if (component.equals("red")||component=="r") {
+                    currentColor = new Color(currentColor.getRed(),0,0);
+                }
+                if (component.equals("green")||component=="g") {
+                    currentColor = new Color(0,currentColor.getGreen(),0);
+                }
+                if (component.equals("blue")||component=="b") {
+                    currentColor = new Color(0,0,currentColor.getBlue());
+                }
+                collagePicture.set(x+Xoffset,y+Yoffset,currentColor);
+            }
     }
 
     /*
@@ -197,8 +212,17 @@ public class Collage {
      * @param collageRow tile row
      */
     public void replaceTile (String filename,  int collageCol, int collageRow) {
-
-        // WRITE YOUR CODE HERE
+        Picture shell = new Picture(filename);
+        Picture newTile = new Picture(tileDimension, tileDimension);
+        scale(shell, newTile);
+        Color currentColor;
+        int Xoffset = collageCol*tileDimension;
+        int Yoffset = collageRow*tileDimension;
+        for (int x = 0; x<tileDimension; x++)
+            for(int y = 0; y<tileDimension; y++){
+                currentColor=newTile.get(x,y);
+                collagePicture.set(x+Xoffset,y+Yoffset,currentColor);
+            }
     }
 
     /*
@@ -208,8 +232,15 @@ public class Collage {
      * @param collageRow tile row
      */
     public void grayscaleTile (int collageCol, int collageRow) {
-
-        // WRITE YOUR CODE HERE
+        Color currentColor;
+        int Xoffset = collageCol*tileDimension;
+        int Yoffset = collageRow*tileDimension;
+        for (int x = 0; x<tileDimension; x++)
+            for(int y = 0; y<tileDimension; y++){
+                currentColor=collagePicture.get(x+Xoffset,y+Yoffset);
+                currentColor=toGray(currentColor);
+                collagePicture.set(x+Xoffset,y+Yoffset,currentColor);
+            }
     }
 
     /**
